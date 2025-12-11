@@ -1,6 +1,7 @@
 package cl.ipss.colegio_api.models;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,5 +48,15 @@ public class Practica {
   @JoinColumn(name = "jefe_directo_rut")
   @NotNull(message = "El jefe directo no puede ser nulo")
   private JefeDirecto jefeDirecto;
+
+  //creación de campos para auditoría
+ 
+  private boolean active;
+
+  private Date created_at;
+ 
+  private Date updated_at;
+
+  private Date deleted_at;
 
 }

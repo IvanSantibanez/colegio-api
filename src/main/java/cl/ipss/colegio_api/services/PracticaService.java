@@ -1,5 +1,6 @@
 package cl.ipss.colegio_api.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,8 @@ public class PracticaService {
   }
 
   public List<Practica> listarTodos() {
-    return practicaRepository.findAll();
+    //return practicaRepository.findAll();
+    return practicaRepository.findByActiveTrue();
   }
 
   public Practica buscarPorId(Long id) {
@@ -68,7 +70,15 @@ public class PracticaService {
   }
 
   public void eliminar(Long id) {
-    practicaRepository.deleteById(id);
-  }
+    // practicaRepository.deleteById(id);
+   
+    practicaRepository.findById(id).ifPresentOrElse(practica -> {
+      practica.setActive(false);
+      practica.setDeleted_at(new Date());
+      practicaRepository.save(practica);
+    }, () -> {
+      throw new EntityNotFoundException("La práctica con ID " + id + " no existe");
+    });
 
+  }
 }
