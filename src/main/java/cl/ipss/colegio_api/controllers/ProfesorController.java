@@ -73,35 +73,41 @@ public class ProfesorController {
   }
 
   @PutMapping(value = "/{id}", produces = "application/json")
-  public ResponseEntity<Object> putPracticas(@PathVariable Long id, @RequestBody Practica practica) {
+  public ResponseEntity<Object> putPracticas(
+      @PathVariable @Min(value = 1, message = "El ID debe ser mayor a 0") Long id, @RequestBody Practica practica) {
 
     Practica practicaExistente = practicaService.buscarPorId(id);
 
     // Validar si la práctica existe y está activa
     if (practicaExistente == null || !practicaExistente.isActive()) {
-        PracticaResponse response = new PracticaResponse();
-        response.setStatus(400);
-        response.setMessage("La práctica no existe");
-        response.setData(null);
-        return ResponseEntity.badRequest().body(response);
+      PracticaResponse response = new PracticaResponse();
+      response.setStatus(400);
+      response.setMessage("La práctica con ID " + id + " no existe");
+      response.setData(null);
+      return ResponseEntity.badRequest().body(response);
     }
 
     // Actualizar los campos necesarios
-    practica.setId(id);
-    practica.setActive(true);
-    practica.setCreated_at(practicaExistente.getCreated_at());
-    practica.setUpdated_at(new Date());
+    practicaExistente.setCreated_at(practicaExistente.getCreated_at());
+    practicaExistente.setEstudiante(practica.getEstudiante());
+    practicaExistente.setFechaInicio(practica.getFechaInicio());
+    practicaExistente.setFechaTermino(practica.getFechaTermino());
+    practicaExistente.setJefeDirecto(practica.getJefeDirecto());
+    practicaExistente.setProfesor(practica.getProfesor());
+    practicaExistente.setTareasDescripcion(practica.getTareasDescripcion());
+    practicaExistente.setUpdated_at(new Date());
 
     PracticaResponse response = new PracticaResponse();
     response.setStatus(200);
     response.setMessage("Práctica actualizada exitosamente");
-    response.setData(practicaService.crear(practica));
+    response.setData(practicaService.crear(practicaExistente));
 
     return ResponseEntity.ok().body(response);
   }
 
   @DeleteMapping(value = "/{id}", produces = "application/json")
-  public ResponseEntity<Object> deletePracticas(@PathVariable Long id) {
+  public ResponseEntity<Object> deletePracticas(
+      @PathVariable @Min(value = 1, message = "El ID debe ser mayor a 0") Long id) {
 
     practicaService.eliminar(id);
 

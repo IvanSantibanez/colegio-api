@@ -38,14 +38,14 @@ public class PracticaService {
     if (practica.getEstudiante() != null) {
       String rutEstudiante = practica.getEstudiante().getRut();
       Estudiante estudiante = estudianteRepository.findById(rutEstudiante)
-          .orElseThrow(() -> new EntityNotFoundException("El Estudiante con RUT" + rutEstudiante + " no existe"));
+          .orElseThrow(() -> new EntityNotFoundException("El Estudiante con RUT " + rutEstudiante + " no existe"));
       practica.setEstudiante(estudiante);
     }
 
     if (practica.getProfesor() != null) {
       String rutProfesor = practica.getProfesor().getRut();
       Profesor profesor = profesorRepository.findById(rutProfesor)
-          .orElseThrow(() -> new EntityNotFoundException("El Profesor con RUT" + rutProfesor + " no existe"));
+          .orElseThrow(() -> new EntityNotFoundException("El Profesor con RUT " + rutProfesor + " no existe"));
       practica.setProfesor(profesor);
     }
 
@@ -60,7 +60,7 @@ public class PracticaService {
   }
 
   public List<Practica> listarTodos() {
-    //return practicaRepository.findAll();
+    // return practicaRepository.findAll();
     return practicaRepository.findByActiveTrue();
   }
 
@@ -71,7 +71,7 @@ public class PracticaService {
 
   public void eliminar(Long id) {
     // practicaRepository.deleteById(id);
-   
+
     practicaRepository.findById(id).ifPresentOrElse(practica -> {
       practica.setActive(false);
       practica.setDeleted_at(new Date());

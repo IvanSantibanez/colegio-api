@@ -14,8 +14,10 @@ import cl.ipss.colegio_api.responses.PracticaResponse;
 import cl.ipss.colegio_api.responses.PracticasResponse;
 import cl.ipss.colegio_api.services.PracticaService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,7 +54,8 @@ public class EstudianteController {
   }
 
   @GetMapping(value = "{id}", produces = "application/json")
-  public ResponseEntity<Object> getPracticaPorId(@org.springframework.web.bind.annotation.PathVariable Long id) {
+  public ResponseEntity<Object> getPracticaPorId(
+      @PathVariable @Min(value = 1, message = "El ID debe ser mayor a 0") Long id) {
     PracticaResponse response = new PracticaResponse();
     response.setStatus(200);
     response.setMessage("Práctica obtenida exitosamente");
